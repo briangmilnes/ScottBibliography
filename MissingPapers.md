@@ -1,6 +1,6 @@
 # Dana S. Scott — Missing Papers (to pull via CMU / browser)
 
-> ## Coverage: 72 / 99 papers + 2 / 4 books held → **27 papers + 2 books still missing**
+> ## Coverage: 74 / 99 papers + 2 / 4 books held → **25 papers + 2 books still missing**
 > (Dana pulling the rest via CMU.)
 
 Entries from `ScottBibliography.pdf` **not** in `ScottBibliography/papers/`.
@@ -25,7 +25,6 @@ Grab these through your **CMU library** account or a browser.
 | 3 | **A symmetric primitive notion of Euclidean geometry** | Indag. Math. 59, 1956 | 🟢 ScienceDirect open archive |
 | 4 | Scott & Roth. A vector method for solving linear equations / inverting matrices | J. Math. & Physics 35, 1956 | 🔵 Wiley |
 | 8 | Scott, Gal & Rosser. Generalization of a lemma of G.F. Rose | JSL 23, 1958 | 🔵 JSTOR / Project Euclid |
-| 12 | On a theorem of Rabin | Indag. Math. 63, 1960 | 🟢 ScienceDirect open archive |
 | 13 | More on the axiom of extensionality | in *Essays on the Foundations of Mathematics* (Fraenkel Festschrift), Magnes/North-Holland, 1961/62, pp. 115–131 | ⚫ **no free scan exists** (not on archive.org; Google Books no preview) — **CMU library / ILL** or used copy |
 | 19 | Measurement structures and linear inequalities | J. Math. Psychology 1, 1964 | 🔵 Elsevier |
 
@@ -50,7 +49,6 @@ Grab these through your **CMU library** account or a browser.
 | 56 | A note on distributive normal forms | *Essays in Honour of Jaakko Hintikka*, Reidel, 1979 | 📖 |
 | 64 | Foreword | in *Calvin C. Elgot Selected Papers*, Springer, 1982 | 📖 |
 | 65 | Scott & Scherlis. First steps towards inferential programming | Information Processing 83 (IFIP), North-Holland, 1983 | 🔵 |
-| 67 | Scott, McCarty & Horty. Bibliography (in *Model-Theoretic Logics*) | Springer, 1985 | 🟢 Project Euclid OA (Incapsula-blocked to curl) |
 | 68 | What should we demand of electronic dictionaries? | *Uses of Large Text Databases*, Waterloo, 1987 | ⚫ |
 | 69 | Capturing concepts with data structures | *Data and Knowledge (DS-2)*, North-Holland, 1988 | 📖 |
 | 70 | Subject Classification and NLP for Retrieval in Large Databases | *Classification Theory in the Computer Age*, 1989 | ⚫ |
@@ -62,6 +60,6 @@ _All acquired — nothing missing in this range._
 
 ---
 ### Fastest wins (grab these first — free in a browser, no CMU/no purchase)
-🟢 **#2, #3 (geometry), #12** — ScienceDirect *Indagationes* open archive · 🟢 **#67** — Project Euclid.
+🟢 **#2, #3 (geometry)** — ScienceDirect *Indagationes* open archive (the last two free-in-browser).
 
 _Note: #62 and #63 are held as whole-book PDFs (`Scott-1982-…-BOOK-*.pdf` at the `ScottBibliography/` top level), chapters not yet extracted. Coverage count is at the top of this file._
