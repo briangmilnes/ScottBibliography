@@ -5,8 +5,8 @@ Citations transcribed from `ScottBibliography.pdf` (Draft of Sunday, March 15, 2
 root: most held items are in `papers/`; items published as, or inside, a whole book
 sit at the top level with a `-BOOK-` tag in the filename.
 
-**Coverage: 74 of 99 papers held · 2 of 4 books held · plus 6 held items not in the numbered list.**
-The 25 papers and 2 books still missing are listed, with a retrieval route for each, in `MissingPapers.md`.
+**Coverage: 77 of 99 papers held · 2 of 4 books held · plus 6 held items not in the numbered list.**
+The 22 papers and 2 books still missing are listed, with a retrieval route for each, in `MissingPapers.md`.
 
 ## Books
 
@@ -22,9 +22,9 @@ The 25 papers and 2 books still missing are listed, with a retrieval route for e
 | # | Citation | Have | PDF |
 |---|----------|:----:|-----|
 | 1 | Scott & Kalicki. Equational completeness of abstract algebras. 1955 | ✓ | papers/Scott-1955-Equational-Completeness-Abstract-Algebras.pdf |
-| 2 | Scott. Equationally complete extensions of finite algebras. 1956 |  |  |
-| 3 | Scott. A symmetric primitive notion of Euclidean geometry. 1956 |  |  |
-| 4 | Scott & Roth. A vector method for solving linear equations… 1956 |  |  |
+| 2 | Scott. Equationally complete extensions of finite algebras. 1956 | ✓ | papers/Scott-1956-Equationally-Complete-Extensions-Finite-Algebras.pdf |
+| 3 | Scott. A symmetric primitive notion of Euclidean geometry. 1956 | ✓ | papers/Scott-1956-Symmetric-Primitive-Notion-Euclidean-Geometry.pdf |
+| 4 | Scott & Roth. A vector method for solving linear equations… 1956 | ✓ | papers/Roth-Scott-1956-Vector-Method-Solving-Linear-Equations.pdf — byline order is Roth & Scott; image scan, no text layer |
 | 5 | Scott. Independence of certain distributive laws in Boolean algebras. 1957 | ✓ | papers/Scott-1957-Independence-Distributive-Laws-Boolean-Algebras.pdf |
 | 6 | Scott & Tarski. The sentential calculus with infinitely long expressions. 1958 | ✓ | papers/Scott-Tarski-1958-Sentential-Calculus-Infinitely-Long-Expressions.pdf |
 | 7 | Scott & Suppes. Foundational aspects of theories of measurement. 1958 | ✓ | papers/Scott-Suppes-1958-Foundational-Aspects-Theories-of-Measurement.pdf |

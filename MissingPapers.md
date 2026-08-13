@@ -1,6 +1,6 @@
 # Dana S. Scott — Missing Papers (to pull via CMU / browser)
 
-> ## Coverage: 74 / 99 papers + 2 / 4 books held → **25 papers + 2 books still missing**
+> ## Coverage: 77 / 99 papers + 2 / 4 books held → **22 papers + 2 books still missing**
 > (Dana pulling the rest via CMU.)
 
 Entries from `ScottBibliography.pdf` **not** in `ScottBibliography/papers/`.
@@ -21,9 +21,6 @@ Grab these through your **CMU library** account or a browser.
 ## Papers — batch 1 (1955–1966)
 | # | Citation | Venue | Route |
 |---|----------|-------|-------|
-| 2 | Equationally complete extensions of finite algebras | Indag. Math. (KNAW Proc. A) 59, 1956 | 🟢 ScienceDirect open archive |
-| 3 | **A symmetric primitive notion of Euclidean geometry** | Indag. Math. 59, 1956 | 🟢 ScienceDirect open archive |
-| 4 | Scott & Roth. A vector method for solving linear equations / inverting matrices | J. Math. & Physics 35, 1956 | 🔵 Wiley |
 | 8 | Scott, Gal & Rosser. Generalization of a lemma of G.F. Rose | JSL 23, 1958 | 🔵 JSTOR / Project Euclid |
 | 13 | More on the axiom of extensionality | in *Essays on the Foundations of Mathematics* (Fraenkel Festschrift), Magnes/North-Holland, 1961/62, pp. 115–131 | ⚫ **no free scan exists** (not on archive.org; Google Books no preview) — **CMU library / ILL** or used copy |
 | 19 | Measurement structures and linear inequalities | J. Math. Psychology 1, 1964 | 🔵 Elsevier |
@@ -60,6 +57,7 @@ _All acquired — nothing missing in this range._
 
 ---
 ### Fastest wins (grab these first — free in a browser, no CMU/no purchase)
-🟢 **#2, #3 (geometry)** — ScienceDirect *Indagationes* open archive (the last two free-in-browser).
+None left. #2, #3, and #4 were acquired on 2026-08-12; no 🟢 open-access items remain.
+Everything still missing needs CMU access (🔵), a book (📖), or archives (⚫).
 
 _Note: #62 and #63 are held as whole-book PDFs (`Scott-1982-…-BOOK-*.pdf` at the `ScottBibliography/` top level), chapters not yet extracted. Coverage count is at the top of this file._
