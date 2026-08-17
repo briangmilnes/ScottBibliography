@@ -5,8 +5,8 @@ Citations transcribed from `ScottBibliography.pdf` (Draft of Sunday, March 15, 2
 root: most held items are in `papers/`; items published as, or inside, a whole book
 sit at the top level with a `-BOOK-` tag in the filename.
 
-**Coverage: 77 of 99 papers held · 2 of 4 books held · plus 6 held items not in the numbered list.**
-The 22 papers and 2 books still missing are listed, with a retrieval route for each, in `MissingPapers.md`.
+**Coverage: 82 of 99 papers held · 2 of 4 books held · plus 6 held items not in the numbered list.**
+The 17 papers and 2 books still missing are listed, with a retrieval route for each, in `MissingPapers.md`.
 
 ## Books
 
@@ -28,7 +28,7 @@ The 22 papers and 2 books still missing are listed, with a retrieval route for e
 | 5 | Scott. Independence of certain distributive laws in Boolean algebras. 1957 | ✓ | papers/Scott-1957-Independence-Distributive-Laws-Boolean-Algebras.pdf |
 | 6 | Scott & Tarski. The sentential calculus with infinitely long expressions. 1958 | ✓ | papers/Scott-Tarski-1958-Sentential-Calculus-Infinitely-Long-Expressions.pdf |
 | 7 | Scott & Suppes. Foundational aspects of theories of measurement. 1958 | ✓ | papers/Scott-Suppes-1958-Foundational-Aspects-Theories-of-Measurement.pdf |
-| 8 | Scott, Gal & Rosser. Generalization of a lemma of G.F. Rose. 1958 |  |  |
+| 8 | Scott, Gal & Rosser. Generalization of a lemma of G.F. Rose. 1958 | ✓ | papers/Gal-Rosser-Scott-1958-Generalization-of-a-Lemma-of-G-F-Rose.pdf — byline order is Gal, Rosser & Scott; JSTOR scan of JSL 23(2) 137–138 |
 | 9 | Scott. Dimension in elementary Euclidean geometry. 1959 | ✓ | Scott-1959-Dimension-in-Elementary-Euclidean-Geometry-BOOK-TheAxiomaticMethod.pdf |
 | 10 | Scott & Rabin. Finite automata and their decision problems. 1959 | ✓ | papers/Rabin-Scott-1959-Finite-Automata-and-Their-Decision-Problems.pdf |
 | 11 | Scott. On constructing models for arithmetic. 1959 | ✓ | papers/Scott-1959-On-Constructing-Models-for-Arithmetic.pdf |
@@ -39,7 +39,7 @@ The 22 papers and 2 books still missing are listed, with a retrieval route for e
 | 16 | Scott. Algebras of sets binumerable in complete extensions of arithmetic. 1962 | ✓ | papers/Scott-1962-Algebras-of-Sets-Binumerable.pdf |
 | 17 | Scott, Frayne & Morel. Reduced direct products. 1962 | ✓ | papers/Scott-1962-Reduced-Direct-Products.pdf |
 | 18 | Scott & Monk. Additions to some results of Erdős and Tarski. 1964 | ✓ | papers/Scott-1964-Additions-Results-Erdos-Tarski.pdf |
-| 19 | Scott. Measurement structures and linear inequalities. 1964 |  |  |
+| 19 | Scott. Measurement structures and linear inequalities. 1964 | ✓ | papers/Scott-1964-Measurement-Structures-and-Linear-Inequalities.pdf |
 | 20 | Scott. Invariant Borel sets. 1964 | ✓ | papers/Scott-1964-Invariant-Borel-Sets.pdf |
 | 21 | Scott. Logic with denumerably long formulas and finite strings of quantifiers. 1965 | ✓ | papers/Scott-1965-Logic-with-Denumerably-Long-Formulas.pdf |
 | 22 | Scott & Krauss. Assigning probabilities to logical formulas. 1966 | ✓ | papers/Scott-Krauss-1966-Assigning-Probabilities-to-Logical-Formulas.pdf |
@@ -54,7 +54,7 @@ The 22 papers and 2 books still missing are listed, with a retrieval route for e
 | 31 | Scott. The problem of giving precise semantics for formal languages. 1970 |  |  |
 | 32 | Scott. Extending the topological interpretation to intuitionistic analysis, II. 1970 | ✓ | papers/Scott-1970-Extending-Topological-Interpretation-Intuitionistic-Analysis-II.pdf |
 | 33 | Scott. Outline of a mathematical theory of computation. 1970 | ✓ | papers/Scott-1970-Outline-of-a-Mathematical-Theory-of-Computation-PRG2.pdf |
-| 34 | Scott. Semantical archaeology: A parable. 1970 |  |  |
+| 34 | Scott. Semantical archaeology: A parable. 1970 | ✓ | papers/Scott-1972-Semantical-Archaeology-A-Parable-REPRINT-SemanticsOfNaturalLanguage.pdf — the 1972 Reidel reprint (pp. 666–674), not the Synthese 21 original |
 | 35 | Scott. The lattice of flow diagrams. 1971 | ✓ | papers/Scott-1971-The-Lattice-of-Flow-Diagrams.pdf |
 | 36 | Scott & Myhill. Ordinal definability. 1971 | ✓ | papers/Myhill-Scott-1971-Ordinal-Definability.pdf |
 | 37 | Scott. On engendering an illusion of understanding. 1971 | ✓ | papers/Scott-1971-On-Engendering-an-Illusion-of-Understanding.pdf |
@@ -70,7 +70,7 @@ The 22 papers and 2 books still missing are listed, with a retrieval route for e
 | 47 | Scott. Rules and derived rules. 1974 |  |  |
 | 48 | Scott. Lambda-calculus and recursion theorem (prelim.). 1975 |  |  |
 | 49 | Scott. Combinators and classes. 1975 | ✓ | papers/Scott-1975-Combinators-and-Classes.pdf |
-| 50 | Scott. Some philosophical issues concerning theories of combinators. 1975 |  |  |
+| 50 | Scott. Some philosophical issues concerning theories of combinators. 1975 | ✓ | papers/Scott-1975-Some-Philosophical-Issues-Concerning-Theories-of-Combinators.pdf |
 | 51 | Scott. Does many-valued logic have any use? 1976 | ✓ | papers/Scott-1974-Does-Many-Valued-Logic-Have-Any-Use.pdf |
 | 52 | Scott. Data types as lattices. SIAM J. Comput. 1976 | ✓ | papers/Scott-1976-Data-Types-as-Lattices.pdf |
 | 53 | Scott. Logic and programming languages. CACM 1977 | ✓ | papers/Scott-1977-Logic-and-Programming-Languages-Turing-Award.pdf |
@@ -85,7 +85,7 @@ The 22 papers and 2 books still missing are listed, with a retrieval route for e
 | 62 | Scott. Domains for denotational semantics (ICALP 82). 1982 | ✓ | Scott-1982-Domains-for-Denotational-Semantics-BOOK-ICALP82-LNCS140.pdf |
 | 63 | Scott. Lectures on a mathematical theory of computation. 1982 | ✓ | Scott-1982-Lectures-Math-Theory-Computation-BOOK-TheoreticalFoundationsProgMethodology.pdf |
 | 64 | Scott. Foreword (*Calvin C. Elgot Selected Papers*). 1982 |  |  |
-| 65 | Scott & Scherlis. First steps towards inferential programming. 1983 |  |  |
+| 65 | Scott & Scherlis. First steps towards inferential programming. 1983 | ✓ | papers/Scherlis-Scott-1993-First-Steps-Towards-Inferential-Programming-REPRINT-ProgramVerification.pdf — byline order is Scherlis & Scott; the 1993 Kluwer reprint (pp. 99–133), not the IFIP 1983 original |
 | 66 | Scott & Scherlis. Semantically Based Programming Tools (Summary). 1985 | ✓ | papers/Scott-Scherlis-1985-Semantically-Based-Programming-Tools.pdf |
 | 67 | Scott, McCarty & Horty. Bibliography (*Model-Theoretic Logics*). 1985 | ✓ | papers/Scott-McCarty-Horty-1985-Bibliography-in-Model-Theoretic-Logics.pdf |
 | 68 | Scott. What should we demand of electronic dictionaries? 1987 |  |  |

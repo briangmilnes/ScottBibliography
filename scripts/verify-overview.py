@@ -12,6 +12,7 @@ strings, and fails loudly on an unterminated string or unbalanced structure.
 Usage: python3 scripts/verify-overview.py
 """
 
+import argparse
 import os
 import re
 import sys
@@ -62,7 +63,11 @@ def scan_array(src, name):
 
 
 def main():
-    src = open(OVERVIEW, encoding="utf-8").read()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--page", default=OVERVIEW,
+                    help="overview page to verify; defaults to docs/overview.html")
+    a = ap.parse_args()
+    src = open(a.page, encoding="utf-8").read()
     if src.count("<script") != src.count("</script"):
         sys.exit("script tags unbalanced")
 

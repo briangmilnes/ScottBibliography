@@ -137,7 +137,10 @@ NO_ABSTRACT = {
 # that appear in the journals Scott published in.
 MARKER = re.compile(
     r"^[ \t]*(?:\d+[.)]?[ \t]*)?"
-    r"(abstract|summary|r[eé]sum[eé]|zusammenfassung|samenvatting|synopsis)"
+    # "abstra[ceo0]t" rather than "abstract": these scans render the word as
+    # ABSTRAeT and ABSTRAOT, and an unrecognised marker sends the entry down
+    # the opening-paragraph path with the marker text still attached.
+    r"(abstra[cceo0]t|summary|r[eé]sum[eé]|zusammenfassung|samenvatting|synopsis)"
     r"[ \t]*[.:—–-]*[ \t]*(.*)$",
     re.IGNORECASE)
 
@@ -166,23 +169,50 @@ FRONT_INSTITUTION = re.compile(
     r"[A-Z][a-z]+(?:\s[A-Z][a-z]+)?\s+(?:University|Institute|Laboratory))")
 
 
+def structural(src, start=0):
+    """Yield (index, char) for characters outside double-quoted strings.
+
+    Brackets occur inside the data as ordinary text -- an abstract quotes
+    "E[x = {{u, v> :wevex})" -- so a scanner that counts every brace loses
+    track of nesting and stops early. Counting only braces that are outside
+    string literals fixes that. Backslash escapes are skipped as pairs so an
+    escaped quote does not end a string.
+    """
+    i, n, in_str = start, len(src), False
+    while i < n:
+        c = src[i]
+        if in_str:
+            if c == "\\":
+                i += 2
+                continue
+            if c == '"':
+                in_str = False
+        elif c == '"':
+            in_str = True
+        else:
+            yield i, c
+        i += 1
+
+
 def js_arrays(src):
     for name in ("BOOKS", "PAPERS", "EXTRA"):
         i = src.index("const " + name)
         i = src.index("[", i)
         depth, end = 0, None
-        for j in range(i, len(src)):
-            if src[j] == "[":
+        for j, c in structural(src, i):
+            if c == "[":
                 depth += 1
-            elif src[j] == "]":
+            elif c == "]":
                 depth -= 1
                 if depth == 0:
                     end = j
                     break
         if end is None:
             sys.exit("unterminated array: " + name)
-        body, objs, depth, start = src[i + 1:end], [], 0, None
-        for j, c in enumerate(body):
+        objs, depth, start = [], 0, None
+        for j, c in structural(src, i + 1):
+            if j >= end:
+                break
             if c == "{":
                 if depth == 0:
                     start = j
@@ -190,7 +220,7 @@ def js_arrays(src):
             elif c == "}":
                 depth -= 1
                 if depth == 0:
-                    objs.append(body[start:j + 1])
+                    objs.append(src[start:j + 1])
         yield name, objs
 
 
@@ -352,15 +382,49 @@ def best_extraction(split_text, plain_text):
     return cands[0][1], cands[0][2]
 
 
-def blocks(text):
-    """Split into blank-line-delimited blocks, each rejoined into one line.
+# A printed paragraph is marked by an indent on its first line, with
+# continuation lines flush left. Splitting on that recovers paragraph breaks in
+# scans that carry no blank line between paragraphs -- without it, the opening
+# statement of #8 merges with the theorem and proof that follow it into one
+# block. Indents beyond this range are centred headings, not paragraph starts.
+PARA_INDENT_RANGE = (1, 10)
 
-    Line-ending hyphens are treated as word breaks and closed up, since
-    pdftotext preserves the printed hyphenation of justified text.
+
+def paragraphs(lines):
+    """Split a run of lines into paragraphs using first-line indentation."""
+    if len(lines) < 3:
+        return [lines]
+    indents = [len(l) - len(l.lstrip()) for l in lines]
+    base = min(indents)
+    lo, hi = PARA_INDENT_RANGE
+    starts = [i for i in range(1, len(lines))
+              if lo <= indents[i] - base <= hi]
+    # Jittery OCR indentation would mark most lines as paragraph starts, which
+    # would shred the text; treat that as "no reliable indentation".
+    if not starts or len(starts) > len(lines) // 2:
+        return [lines]
+    out, prev = [], 0
+    for s in starts + [len(lines)]:
+        out.append(lines[prev:s])
+        prev = s
+    return [c for c in out if c]
+
+
+def blocks(text):
+    """Split into blocks, each rejoined into one line.
+
+    Blocks are delimited by blank lines and, within a run of lines, by printed
+    paragraph indentation. Line-ending hyphens are treated as word breaks and
+    closed up, since pdftotext preserves the printed hyphenation of justified
+    text.
     """
     out = []
+    chunks = []
     for raw in re.split(r"\n[ \t]*\n", text):
-        lines = [l.rstrip() for l in raw.split("\n") if l.strip()]
+        keep = [l.rstrip() for l in raw.split("\n") if l.strip()]
+        if keep:
+            chunks.extend(paragraphs(keep))
+    for lines in chunks:
         if not lines:
             continue
         s = ""
@@ -502,6 +566,10 @@ WORDS = load_dictionary()
 # so pdftotext returns "a m a t t e r" for "a matter". Four or more single
 # letters in a row is the signal; fewer overlaps with genuine initials and
 # with mathematical variables set inline.
+# Single letters only. Widening this to two-letter tokens was tried and made
+# things worse: "present s in an i n f or m a l way" re-segmented as "present
+# si nan informal way", because the shortest-word-count segmentation of a run
+# containing real short words like "or" and "an" is not the printed one.
 SPACED_RUN = re.compile(r"(?<![A-Za-z])(?:[A-Za-z] ){3,}[A-Za-z](?![A-Za-z])")
 
 
@@ -532,6 +600,30 @@ def unspace(run):
     return " ".join(best[n][1]) if best[n] else run
 
 
+# Scans of serif type read lowercase "l" as capital "I": "severaI",
+# "classicaI", "Iogics". Only rewritten when the l-spelling is a real word and
+# the I-spelling is not, so "I" as a pronoun and roman numerals are untouched.
+I_FOR_L = re.compile(r"\b[A-Za-z]*I[A-Za-z]*\b")
+
+
+def fix_i_for_l(s):
+    if not WORDS:
+        return s
+
+    def repl(m):
+        w = m.group(0)
+        if w == "I" or w.isupper():
+            return w
+        if w.lower() in WORDS:
+            return w
+        alt = w.replace("I", "l")
+        if alt.lower() in WORDS:
+            return alt
+        return w
+
+    return I_FOR_L.sub(repl, s)
+
+
 def clean(s):
     """Repair extraction artifacts without altering the author's wording."""
     for k, v in LIGATURES.items():
@@ -540,7 +632,11 @@ def clean(s):
     s = re.sub("­\\s*", "", s)
     s = s.replace("‐", "-").replace(" ", " ")
     s = SPACED_RUN.sub(lambda m: unspace(m.group(0)), s)
+    s = fix_i_for_l(s)
     s = CITATION_HEAD.sub("", s)
+    # A mis-OCR'd marker survives into the text when the opening-paragraph path
+    # was taken; strip it so the abstract does not begin with its own label.
+    s = re.sub(r"^\s*abstra[cceo0]t\s*[.:—–-]*\s*", "", s, flags=re.IGNORECASE)
     return re.sub(r"[ \t]+", " ", s).strip()
 
 
@@ -640,13 +736,16 @@ def extract(text):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(ROOT, "analyses"))
+    ap.add_argument("--page", default=OVERVIEW,
+                    help="overview page to read entries from; defaults to "
+                         "docs/overview.html")
     ap.add_argument("--sidecar", default=None,
                     help="directory of OCR sidecar .txt files from "
                          "ocr-frontmatter.py, used when a PDF has no text layer")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
 
-    src = open(OVERVIEW, encoding="utf-8").read()
+    src = open(a.page, encoding="utf-8").read()
     recs, needs_ocr = [], []
     for name, objs in js_arrays(src):
         for obj in objs:

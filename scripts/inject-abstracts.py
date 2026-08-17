@@ -17,6 +17,7 @@ Usage: python3 scripts/inject-abstracts.py --json DIR [--dry-run]
 """
 
 import argparse
+import importlib.util
 import json
 import os
 import re
@@ -24,6 +25,17 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OVERVIEW = os.path.join(ROOT, "docs", "overview.html")
+
+# The string-aware scanner is shared with extract-abstracts.py rather than
+# copied: both files must agree on where an entry object ends, and the naive
+# brace count they used first stopped early once injected abstracts began to
+# contain braces of their own ("E[x = {{u, v> :wevex})").
+_spec = importlib.util.spec_from_file_location(
+    "ea", os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                       "extract-abstracts.py"))
+_ea = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_ea)
+structural = _ea.structural
 
 PROVENANCE = {
     ("marked", "text-layer"): "Verbatim from the paper (PDF).",
@@ -50,21 +62,25 @@ def objects(src):
         i = src.index("const " + name)
         i = src.index("[", i)
         depth, end = 0, None
-        for j in range(i, len(src)):
-            if src[j] == "[":
+        for j, c in structural(src, i):
+            if c == "[":
                 depth += 1
-            elif src[j] == "]":
+            elif c == "]":
                 depth -= 1
                 if depth == 0:
                     end = j
                     break
+        if end is None:
+            sys.exit("unterminated array: " + name)
         depth, start = 0, None
-        for j in range(i + 1, end):
-            if src[j] == "{":
+        for j, c in structural(src, i + 1):
+            if j >= end:
+                break
+            if c == "{":
                 if depth == 0:
                     start = j
                 depth += 1
-            elif src[j] == "}":
+            elif c == "}":
                 depth -= 1
                 if depth == 0:
                     yield start, j + 1
@@ -73,6 +89,9 @@ def objects(src):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", default=os.path.join(ROOT, "analyses"))
+    ap.add_argument("--page", default=OVERVIEW,
+                    help="overview page to write into; defaults to "
+                         "docs/overview.html")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
@@ -80,7 +99,7 @@ def main():
                           encoding="utf-8"))
     by_pdf = {r["pdf"]: r for r in recs}
 
-    src = open(OVERVIEW, encoding="utf-8").read()
+    src = open(a.page, encoding="utf-8").read()
     spans = list(objects(src))
 
     filled = skipped_recorded = skipped_none = 0
@@ -124,10 +143,10 @@ def main():
     print("left null (no abstract) : %d" % skipped_none)
 
     if a.dry_run:
-        print("\ndry run: docs/overview.html not written")
+        print("\ndry run: %s not written" % a.page)
         return
-    open(OVERVIEW, "w", encoding="utf-8").write(result)
-    print("\nwrote %s (%d -> %d bytes)" % (OVERVIEW, len(src), len(result)))
+    open(a.page, "w", encoding="utf-8").write(result)
+    print("\nwrote %s (%d -> %d bytes)" % (a.page, len(src), len(result)))
 
 
 if __name__ == "__main__":
