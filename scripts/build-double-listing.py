@@ -6,6 +6,12 @@ LaTeX longtable compiled with xelatex. Columns: this page's row number, the
 number printed in ScottBibliography.pdf (draft of Sunday, March 15, 2026), their
 difference, year, authors, title.
 
+A third table lists the papers numbered in the bibliography that the archive does
+not hold. These have no row in index.html, so they appear in the first two tables
+only as gaps in the Bib # column; the gaps are computed here from the Bib # values
+and cross-checked against MissingPapers.md, which supplies venue and retrieval
+route. A disagreement between the two is a hard error, not a silent difference.
+
 Usage: build-double-listing.py <output-dir>
 """
 import re, os, sys, html, subprocess
@@ -40,6 +46,59 @@ def rows(table):
 
 tables = re.findall(r'<table>.*?</table>', src, re.S)
 books, papers = rows(tables[0]), rows(tables[1])
+
+# --- papers the bibliography numbers but the archive does not hold -------------
+# The Bib # column numbers 1..99 over the whole corpus; a number absent from every
+# row of either table is a paper not held. Book-tagged items (#9, #62, #63) carry
+# their Bib # in the book table, so both tables must be scanned.
+held = {int(b) for t in (books, papers) for n, b, y, a, ti in t if b.isdigit()}
+gaps = [n for n in range(1, 100) if n not in held]
+
+# Year and title come from the bibliography itself, so the third table is keyed to
+# the same document as the Bib # column.
+BIBROW = re.compile(r'^\|\s*(\d+)\s*\|\s*(.*?)\s*\|', re.M)
+bibmd = open(os.path.join(ROOT, 'ScottBibliography.md'), encoding='utf-8').read()
+bib = {}
+for m in BIBROW.finditer(bibmd):
+    cite = m.group(2)
+    y = re.search(r'(\d{4})\.?\s*$', cite)
+    bib[int(m.group(1))] = (y.group(1) if y else '',
+                            re.sub(r'^Scott[^.]*\.\s*', '', cite))
+
+# Venue and retrieval route come from MissingPapers.md, whose paper tables carry
+# four cells: number, citation, venue, route.
+MISSROW = re.compile(r'^\|\s*(\d+)\s*\|(.*?)\|(.*?)\|(.*?)\|\s*$', re.M)
+missmd = open(os.path.join(ROOT, 'MissingPapers.md'), encoding='utf-8').read()
+route_of = {'\U0001f7e2': 'OA', '\U0001f535': 'CMU', '\U0001f4d6': 'BOOK',
+            '\u26ab': 'ARCHIVE'}
+miss = {}
+for m in MISSROW.finditer(missmd):
+    route = next((v for k, v in route_of.items() if k in m.group(4)), '')
+    miss[int(m.group(1))] = (m.group(3).strip(), route)
+
+if set(miss) != set(gaps):
+    sys.exit('gap set %s disagrees with MissingPapers.md %s'
+             % (sorted(gaps), sorted(miss)))
+
+def missing_body():
+    L = []
+    for n in gaps:
+        y, t = bib.get(n, ('', ''))
+        venue, route = miss[n]
+        # Strip the trailing year the bibliography citation repeats; the venue
+        # string carries its own. A few citations also fold the venue into the
+        # title (#72 carries "MCS News '90"), so drop any trailing fragment the
+        # venue already states, then the punctuation left behind.
+        t = re.sub(r'\s*\(?\d{4}\)?\.?\s*$', '', t)
+        while True:
+            m = re.search(r'[.,]\s*([^.,]+?)\s*[.,]?\s*$', t)
+            if m and m.group(1) and m.group(1) in venue:
+                t = t[:m.start()]
+            else:
+                break
+        t = t.rstrip(' .,')
+        L.append(f'{n} & {y} & {tex(t)} & {tex(venue)} & {route} \\\\')
+    return '\n'.join(L)
 
 def delta(n, b):
     if n.isdigit() and b.isdigit():
@@ -87,6 +146,8 @@ rows, first diverging at row 8 (= bibliography 6), where the archive inserts the
 1958 dissertation that the bibliography does not number; $\Delta$ runs
 $''' + '%+d' % min(ds) + r'''$ to $''' + '%+d' % max(ds) + r'''$, widening as the 17 papers not yet held drop out.
 An \textit{italic roman} Bib\,\# marks a held item the bibliography does not number.
+The ''' + str(len(gaps)) + r''' numbers absent from the Bib\,\# column are the papers not held; they are
+listed in full in the third table.
 \medskip
 
 \noindent\textbf{ScottBibliography.md} reproduces the printed bibliography exactly:
@@ -123,6 +184,28 @@ has a gap or a duplicate.\bigskip
 ''' + body(papers) + r'''
 \bottomrule
 \end{longtable}
+\bigskip
+
+\noindent\textbf{Route} is the retrieval route recorded in \texttt{MissingPapers.md}:
+\textsc{cmu} paywalled but covered by a CMU subscription, \textsc{book} sold only as
+part of a book, \textsc{archive} no online copy located. Coverage closes at
+''' + str(len(held)) + r''' of 99 papers held.\medskip
+
+\begin{longtable}{@{}r@{\hskip 10pt}l@{\hskip 10pt}p{58mm}@{\hskip 8pt}p{58mm}@{\hskip 8pt}l@{}}
+\multicolumn{5}{@{}l}{\textbf{Numbered in the bibliography, not held} --- ''' + str(len(gaps)) + r''' papers}\\[2pt]
+\toprule
+\textbf{Bib \#} & \textbf{Year} & \textbf{Title} & \textbf{Venue} & \textbf{Route}\\
+\midrule
+\endfirsthead
+\multicolumn{5}{@{}l}{\textbf{Numbered in the bibliography, not held} \textit{(continued)}}\\[2pt]
+\toprule
+\textbf{Bib \#} & \textbf{Year} & \textbf{Title} & \textbf{Venue} & \textbf{Route}\\
+\midrule
+\endhead
+''' + missing_body() + r'''
+\bottomrule
+\end{longtable}
+
 }
 \end{document}
 '''
@@ -139,5 +222,5 @@ subprocess.run(['xelatex', '-interaction=nonstopmode', 'ScottDoubleListing.tex']
                cwd=OUT, capture_output=True, text=True)
 pdf = os.path.join(OUT, 'ScottDoubleListing.pdf')
 print(f'books={len(books)} papers={len(papers)} equal={eq}/{len(num)} '
-      f'delta={min(ds):+d}..{max(ds):+d}')
+      f'delta={min(ds):+d}..{max(ds):+d} held={len(held)}/99 missing={len(gaps)}')
 print(f'{pdf}  {os.path.getsize(pdf)} bytes')
